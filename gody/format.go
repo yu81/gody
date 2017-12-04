@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"encoding/json"
 	"encoding/csv"
+	"io"
+	"os"
 	"unicode/utf8"
 	"sort"
 	"github.com/spf13/cobra"
@@ -30,7 +32,7 @@ func Format(target FormatTarget) {
 	case "tsv":
 		toXsv(target, "\t")
 	case "json":
-		toJson(target)
+		toJson(target, os.Stdout)
 	}
 }
 
@@ -87,9 +89,13 @@ func toXsv(target FormatTarget, delimiter string) {
 	}
 }
 
-func toJson(target FormatTarget) {
-	jsonString, _ := json.Marshal(target.ddbresult)
-	target.cmd.Println(string(jsonString))
+func toJson(target FormatTarget, out io.Writer) {
+	json.NewEncoder(out).Encode(target)
+}
+
+func deprecatedToJson(target FormatTarget, out io.Writer) {
+	jsonString, _ := json.Marshal(target)
+	fmt.Fprint(out, string(jsonString))
 }
 
 func Index(vs []string, t string) int {
