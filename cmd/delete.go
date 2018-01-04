@@ -19,20 +19,20 @@ import (
 	"github.com/watarukura/gody/gody"
 )
 
-var getOption gody.GetItemOption
+var deleteOption gody.DeleteOption
 
 func init() {
 }
 
-func NewCmdGet() *cobra.Command {
+func NewCmdDel() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get",
-		Short: "Get one record",
+		Use:   "delete",
+		Short: "Delete one record",
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return validateParams(&getOption)
+			return validateParams(&deleteOption)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			gody.Get(&getOption, cmd)
+			gody.Delete(&deleteOption, cmd)
 		},
 	}
 
@@ -40,9 +40,6 @@ func NewCmdGet() *cobra.Command {
 	options.StringVarP(&getOption.TableName, "table", "T", "", "DynamoDB table name")
 	options.StringVar(&getOption.PartitionKey, "pkey", "", "Partition Key")
 	options.StringVar(&getOption.SortKey, "skey", "", "Sort Key")
-	options.StringVar(&getOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
-	options.BoolVar(&getOption.Header, "header", false, "With Header")
-	options.StringVar(&getOption.Field, "field", "", "Select Fields comma separated ex)field1,field2...")
 
 	return cmd
 

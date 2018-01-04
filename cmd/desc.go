@@ -19,30 +19,28 @@ import (
 	"github.com/watarukura/gody/gody"
 )
 
-var getOption gody.GetItemOption
+var descOption gody.DescOption
 
 func init() {
 }
 
-func NewCmdGet() *cobra.Command {
+func NewCmdDesc() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get",
-		Short: "Get one record",
+		Use:   "desc",
+		Short: "Describe table",
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return validateParams(&getOption)
+			return validateParams(&descOption)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			gody.Get(&getOption, cmd)
+			gody.Desc(&descOption, cmd)
 		},
 	}
 
 	options := cmd.Flags()
-	options.StringVarP(&getOption.TableName, "table", "T", "", "DynamoDB table name")
-	options.StringVar(&getOption.PartitionKey, "pkey", "", "Partition Key")
-	options.StringVar(&getOption.SortKey, "skey", "", "Sort Key")
-	options.StringVar(&getOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
-	options.BoolVar(&getOption.Header, "header", false, "With Header")
-	options.StringVar(&getOption.Field, "field", "", "Select Fields comma separated ex)field1,field2...")
+	options.StringVarP(&descOption.TableName, "table", "T", "", "DynamoDB table name")
+	options.StringVar(&descOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
+	options.BoolVar(&descOption.Header, "header", false, "With Header")
+	options.StringVar(&descOption.Field, "field", "", "Select Fields comma separated ex)field1,field2...")
 
 	return cmd
 

@@ -1,76 +1,86 @@
 package gody
 
 import (
-	"fmt"
-	"encoding/json"
 	"encoding/csv"
+	"encoding/json"
+	"fmt"
 	"os"
-	"unicode/utf8"
 	"sort"
+	"unicode/utf8"
+
+	"github.com/spf13/cobra"
 )
 
-var (
-	body [][]string
-)
+type FormatTarget struct {
+	ddbresult []map[string]interface{}
+	format    string
+	header    bool
+	fields    []string
+	cmd       *cobra.Command
+}
 
-func Format(ddbresult []map[string]interface{}, format string, header bool, fields []string) {
-	switch format {
+func Format(target FormatTarget) {
+	switch target.format {
 	case "ssv":
-		toXsv(ddbresult, header, " ", fields)
+		toXsv(target, " ")
 	case "csv":
-		toXsv(ddbresult, header, ",", fields)
+		toXsv(target, ",")
 	case "tsv":
-		toXsv(ddbresult, header, "\t", fields)
+		toXsv(target, "\t")
 	case "json":
-		toJson(ddbresult, fields)
+		toJSON(target)
+	default:
+		target.cmd.SetOutput(os.Stderr)
+		target.cmd.Println("choice format ssv|csv|tsv|json")
+		os.Exit(1)
 	}
 }
 
-func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string, fields []string) {
-	w := csv.NewWriter(os.Stdout)
+func toXsv(target FormatTarget, delimiter string) {
+	w := csv.NewWriter(target.cmd.OutOrStdout())
 	delm, _ := utf8.DecodeRuneInString(delimiter)
 	w.Comma = delm
 
-	// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
-	// headをユニークなsliceにする
-	head := make([]string, 0, len(ddbresult))
-	encountered := map[string]bool{}
-	for _, v := range ddbresult {
-		for k, _ := range v {
-			if len(fields) > 0 {
-				if !encountered[k] && Index(fields, k) > -1 {
-					encountered[k] = true
-					head = append(head, k)
-				}
-			} else {
+	head := make([]string, 0, len(target.ddbresult))
+	if len(target.fields) > 0 {
+		head = target.fields
+	} else {
+		// https://qiita.com/hi-nakamura/items/5671eae147ffa68c4466
+		// headをユニークなsliceにする
+		encountered := map[string]bool{}
+		for _, v := range target.ddbresult {
+			for k := range v {
 				if !encountered[k] {
 					encountered[k] = true
 					head = append(head, k)
 				}
 			}
 		}
+		// headerをsortしておおよそ同じ順に表示されるようにする
+		sort.Strings(head)
 	}
-	// headerをsortしておおよそ同じ順に表示されるようにする
-	sort.Strings(head)
 
-	if header {
+	if target.header {
 		w.Write(head)
 		w.Flush()
 	}
 
-	var body_unit []string
-	for _, v := range ddbresult {
+	var (
+		body [][]string
+	)
+	bodyUnit := []string{}
+	for _, v := range target.ddbresult {
 		for _, h := range head {
 			// 存在しないキーの場合は、値を"_"にする
 			_, ok := v[h]
 			if ok {
-				body_unit = append(body_unit, fmt.Sprint(v[h]))
+				bodyUnit = append(bodyUnit, fmt.Sprint(v[h]))
 			} else {
-				body_unit = append(body_unit, "_")
+				bodyUnit = append(bodyUnit, "_")
 			}
 		}
-		body = append(body, body_unit)
-		body_unit = make([]string, 0)
+		body = append(body, bodyUnit)
+		bodyUnit = []string{}
 	}
 
 	for _, b := range body {
@@ -79,9 +89,26 @@ func toXsv(ddbresult []map[string]interface{}, header bool, delimiter string, fi
 	}
 }
 
-func toJson(ddbresult []map[string]interface{}, fields []string) {
-	jsonString, _ := json.Marshal(ddbresult)
-	fmt.Println(string(jsonString))
+func toJSON(target FormatTarget) {
+	var jsonString []byte
+	if len(target.fields) > 0 {
+		m := make(map[string]interface{}, len(target.fields))
+		marr := []map[string]interface{}{}
+		for _, v := range target.ddbresult {
+			for _, f := range target.fields {
+				_, ok := v[f]
+				if ok {
+					m[f] = v[f]
+				}
+			}
+			marr = append(marr, m)
+			m = map[string]interface{}{}
+		}
+		jsonString, _ = json.Marshal(marr)
+	} else {
+		jsonString, _ = json.Marshal(target.ddbresult)
+	}
+	target.cmd.Println(string(jsonString))
 }
 
 func Index(vs []string, t string) int {

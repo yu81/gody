@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"testing"
 	"bytes"
-	"strings"
 	"fmt"
+	"strings"
+	"testing"
 )
 
-func TestScan(t *testing.T) {
+func TestCmdScan(t *testing.T) {
 	cases := []struct {
 		command string
 		want    string
@@ -15,7 +15,7 @@ func TestScan(t *testing.T) {
 		{command: "gody scan --table test --limit -1", want: "Error: Parameter error: Limit cannot be less than 0"},
 	}
 
-	for _,c := range cases {
+	for _, c := range cases {
 		buf := new(bytes.Buffer)
 		cmd := NewCmdRoot()
 		cmd.SetOutput(buf)

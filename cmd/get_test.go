@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"testing"
 	"bytes"
-	"strings"
 	"fmt"
+	"strings"
+	"testing"
 )
 
-func TestGet(t *testing.T) {
+func TestCmdGet(t *testing.T) {
 	cases := []struct {
 		command string
 		want    string
@@ -15,7 +15,7 @@ func TestGet(t *testing.T) {
 		{command: "gody get --pkey aaa", want: "Error: Parameter error: TableName is required"},
 	}
 
-	for _,c := range cases {
+	for _, c := range cases {
 		buf := new(bytes.Buffer)
 		cmd := NewCmdRoot()
 		cmd.SetOutput(buf)

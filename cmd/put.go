@@ -19,30 +19,27 @@ import (
 	"github.com/watarukura/gody/gody"
 )
 
-var getOption gody.GetItemOption
+var putOption gody.PutItemOption
 
 func init() {
 }
 
-func NewCmdGet() *cobra.Command {
+func NewCmdPut() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get",
-		Short: "Get one record",
+		Use:   "put",
+		Short: "Put record(s)",
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return validateParams(&getOption)
+			return validateParams(&putOption)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			gody.Get(&getOption, cmd)
+			gody.Put(&putOption, cmd)
 		},
 	}
 
 	options := cmd.Flags()
-	options.StringVarP(&getOption.TableName, "table", "T", "", "DynamoDB table name")
-	options.StringVar(&getOption.PartitionKey, "pkey", "", "Partition Key")
-	options.StringVar(&getOption.SortKey, "skey", "", "Sort Key")
-	options.StringVar(&getOption.Format, "format", "ssv", "Output Format ssv|csv|tsv|json")
-	options.BoolVar(&getOption.Header, "header", false, "With Header")
-	options.StringVar(&getOption.Field, "field", "", "Select Fields comma separated ex)field1,field2...")
+	options.StringVarP(&putOption.TableName, "table", "T", "", "DynamoDB table name")
+	options.StringVar(&putOption.Format, "format", "ssv", "Input Format ssv|csv|tsv|json")
+	options.StringVar(&putOption.File, "file", "", "Path to input File (optional; default is stdin)")
 
 	return cmd
 
