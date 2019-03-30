@@ -25,6 +25,7 @@ func Put(option *PutItemOption, cmd *cobra.Command) {
 	svc, err := NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),
+		viper.GetString("endpoint"),
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
@@ -34,10 +35,10 @@ func Put(option *PutItemOption, cmd *cobra.Command) {
 		os.Exit(1)
 	}
 
-	item := dynamodb.NewPutItem()
 	attributes := buildAttribute(option, cmd)
-	table.AddItem(item)
 	for _, l := range attributes {
+		item := dynamodb.NewPutItem()
+		table.AddItem(item)
 		for k, v := range l {
 			item.AddAttribute(k, v)
 		}

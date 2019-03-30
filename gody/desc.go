@@ -19,6 +19,7 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 	svc, err := NewService(
 		viper.GetString("profile"),
 		viper.GetString("region"),
+		viper.GetString("endpoint"),
 	)
 	table, err := svc.GetTable(option.TableName)
 	if err != nil {
@@ -28,13 +29,7 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 		os.Exit(1)
 	}
 
-	design, err := table.Design()
-	if err != nil {
-		cmd.SetOutput(os.Stderr)
-		cmd.Println("error to get table design")
-		cmd.Println(err)
-		os.Exit(1)
-	}
+	design := table.GetDesign()
 
 	name := design.GetName()
 	pkey := design.GetHashKeyName()
@@ -65,8 +60,6 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 				gsiSkeys = append(gsiSkeys, "_")
 			}
 		}
-	} else {
-		gsiNames = append(gsiNames, "_")
 	}
 
 	result := map[string]interface{}{
@@ -80,9 +73,11 @@ func Desc(option *DescOption, cmd *cobra.Command) {
 	var gsiSkey string
 	for i, name := range gsiNames {
 		gsiPkey = "GSI_pkey/" + name
-		gsiSkey = "GSI_skey/" + name
 		result[gsiPkey] = gsiPkeys[i]
-		result[gsiSkey] = gsiSkeys[i]
+		if len(gsiSkeys) > 0 {
+			gsiSkey = "GSI_skey/" + name
+			result[gsiSkey] = gsiSkeys[i]
+		}
 	}
 
 	var resultSlice []map[string]interface{}

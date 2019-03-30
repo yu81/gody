@@ -45,15 +45,6 @@ $ gody query --table <TableName> \
 
 ```
 
-### Update
-
-```
-$ gody update --table <TableName> \
-     --pkey <PartitionKey> \
-     --skey <SortKey> \
-     --set {}
-```
-
 ### Put
 
 ```
@@ -92,4 +83,12 @@ $ gody scan --table <TableName> \
      --format <ssv|csv|tsv|json> \
      --header \
      --limit 10
+```
+
+### Desc
+
+```
+$ gody desc --table <TableName> \
+     --format <ssv|csv|tsv|json> \
+     --header
 ```
