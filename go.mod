@@ -21,7 +21,7 @@ require (
 	github.com/spf13/pflag v1.0.2
 	github.com/spf13/viper v1.1.0
 	golang.org/x/sys v0.0.0-20180831094639-fa5fdf94c789
-	golang.org/x/text v0.3.0
+	golang.org/x/text v0.3.2
 	gopkg.in/go-playground/validator.v9 v9.21.0
 	gopkg.in/yaml.v2 v2.2.1
 )
