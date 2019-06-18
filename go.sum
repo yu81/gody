@@ -35,6 +35,8 @@ github.com/spf13/jwalterweatherman v0.0.0-20180814060501-14d3d4c51834 h1:kJI9pPz
 github.com/spf13/jwalterweatherman v0.0.0-20180814060501-14d3d4c51834/go.mod h1:cQK4TGJAtQXfYWX+Ddv3mKDzgVb68N+wFjFa4jdeBTo=
 github.com/spf13/pflag v1.0.2 h1:Fy0orTDgHdbnzHcsOgfCN4LtHf0ec3wwtiwJqwvf3Gc=
 github.com/spf13/pflag v1.0.2/go.mod h1:DYY7MBk1bdzusC3SYhjObp+wFpr4gzcvqqNjLnInEg4=
+github.com/spf13/pflag v1.0.3 h1:zPAT6CGy6wXeQ7NtTnaTerfKOsV6V6F8agHXFiazDkg=
+github.com/spf13/pflag v1.0.3/go.mod h1:DYY7MBk1bdzusC3SYhjObp+wFpr4gzcvqqNjLnInEg4=
 github.com/spf13/viper v1.1.0 h1:V7OZpY8i3C1x/pDmU0zNNlfVoDz112fSYvtWMjjS3f4=
 github.com/spf13/viper v1.1.0/go.mod h1:A8kyI5cUJhb8N+3pkfONlcEcZbueH6nhAm0Fq7SrnBM=
 golang.org/x/sys v0.0.0-20180831094639-fa5fdf94c789 h1:T8D7l6WB3tLu+VpKvw06ieD/OhBi1XpJmG1U/FtttZg=

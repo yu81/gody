@@ -18,7 +18,7 @@ require (
 	github.com/spf13/cast v1.2.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/jwalterweatherman v0.0.0-20180814060501-14d3d4c51834
-	github.com/spf13/pflag v1.0.2
+	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.1.0
 	golang.org/x/sys v0.0.0-20180831094639-fa5fdf94c789
 	golang.org/x/text v0.3.0
