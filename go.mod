@@ -23,5 +23,5 @@ require (
 	golang.org/x/sys v0.0.0-20180831094639-fa5fdf94c789
 	golang.org/x/text v0.3.0
 	gopkg.in/go-playground/validator.v9 v9.21.0
-	gopkg.in/yaml.v2 v2.2.1
+	gopkg.in/yaml.v2 v2.2.2
 )
