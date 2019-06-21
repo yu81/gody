@@ -1,7 +1,7 @@
 module github.com/watarukura/gody
 
 require (
-	github.com/aws/aws-sdk-go v1.15.26
+	github.com/aws/aws-sdk-go v1.20.5
 	github.com/evalphobia/aws-sdk-go-wrapper v1.3.1
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/go-ini/ini v1.38.2
